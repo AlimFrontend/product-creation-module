@@ -40,11 +40,15 @@ function buildApiBody(values: ProductFormValues): Record<string, unknown> {
   };
 }
 
+/** API принимает массив объектов (один товар — один элемент) */
+type NomenclatureItem = ReturnType<typeof buildApiBody>;
+
 async function createProductApi(
   payload: ProductFormValues
 ): Promise<CreateProductResponse> {
   productSchema.parse(payload);
-  const body = buildApiBody(payload);
+  const item = buildApiBody(payload);
+  const body: NomenclatureItem[] = [item];
 
   const url = `${API_URL.replace(/\/?$/, "")}/?token=${API_TOKEN}`;
 
@@ -88,7 +92,9 @@ async function createProductApi(
     throw error;
   }
 
-  return response.json();
+  const data = await response.json();
+  const result = Array.isArray(data) ? data[0] : data;
+  return result as CreateProductResponse;
 }
 
 export function useCreateProduct() {
