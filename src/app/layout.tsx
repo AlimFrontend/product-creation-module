@@ -5,7 +5,10 @@ import { ThemeProvider } from "@/shared/lib/theme-provider";
 
 export const metadata: Metadata = {
   title: "Создание товара для маркетплейса",
-  description: "Создавайте и настраивайте карточки товаров для маркетплейса."
+  description: "Создавайте и настраивайте карточки товаров для маркетплейса.",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export default function RootLayout({
