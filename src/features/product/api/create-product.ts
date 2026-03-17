@@ -4,6 +4,9 @@ import {
   type ProductFormValues
 } from "@/features/product/model/schema";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "https://app.tablecrm.com/api/v1/nomenclature/";
+const API_TOKEN = process.env.NEXT_PUBLIC_API_TOKEN ?? "af1874616430e04cfd4bce30035789907e899fc7c3a1a4bb27254828ff304a77";
+
 export type CreateProductResponse = {
   id: number;
   name: string;
@@ -19,7 +22,9 @@ async function createProductApi(
 ): Promise<CreateProductResponse> {
   const body = productSchema.parse(payload);
 
-  const response = await fetch("/nomenclature?token=af1874616430e04cfd4bce30035789907e899fc7c3a1a4bb27254828ff304a77", {
+  const url = `${API_URL.replace(/\/?$/, "")}/?token=${API_TOKEN}`;
+
+  const response = await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
