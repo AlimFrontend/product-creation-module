@@ -33,7 +33,6 @@ export function ProductForm() {
     geocodeAddress,
     parseNumericField,
     resetForm,
-    cloneValues,
     generateAllFromNameAction,
     formatShortDescription,
     formatLongDescription,
@@ -465,15 +464,6 @@ export function ProductForm() {
               </FormItem>
             </CardContent>
             <CardFooter className="justify-between gap-3 border-t bg-muted/40 px-6 py-4">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={cloneValues}
-                disabled={isSubmitting}
-              >
-                Создать копию товара
-              </Button>
               <div className="flex gap-2">
                 <Button
                   type="button"
