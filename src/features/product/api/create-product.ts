@@ -17,19 +17,43 @@ export type ApiError =
   | { type: "validation"; message: string; fieldErrors?: Record<string, string[]> }
   | { type: "unknown"; message: string };
 
+/** Формат тела запроса к TableCRM API (только нужные поля, числа целые где надо) */
+function buildApiBody(values: ProductFormValues): Record<string, unknown> {
+  return {
+    name: values.name,
+    type: "product",
+    description_short: values.description_short,
+    description_long: values.description_long,
+    code: values.code,
+    unit: Math.floor(Number(values.unit)) || 116,
+    category: Math.floor(Number(values.category)) || 2477,
+    cashback_type: "lcard_cashback",
+    seo_title: values.seo_title,
+    seo_description: values.seo_description,
+    seo_keywords: Array.isArray(values.seo_keywords) ? values.seo_keywords : [],
+    global_category_id: Math.floor(Number(values.global_category_id)) || 127,
+    marketplace_price: Math.round(Number(values.marketplace_price)) || 0,
+    chatting_percent: Math.min(100, Math.max(0, Math.floor(Number(values.chatting_percent)))) || 0,
+    address: values.address,
+    latitude: Number(Number(values.latitude).toFixed(6)),
+    longitude: Number(Number(values.longitude).toFixed(6)),
+  };
+}
+
 async function createProductApi(
   payload: ProductFormValues
 ): Promise<CreateProductResponse> {
-  const body = productSchema.parse(payload);
+  productSchema.parse(payload);
+  const body = buildApiBody(payload);
 
   const url = `${API_URL.replace(/\/?$/, "")}/?token=${API_TOKEN}`;
 
   const response = await fetch(url, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(body)
+    body: JSON.stringify(body),
   });
 
   if (!response.ok) {
@@ -38,7 +62,17 @@ async function createProductApi(
 
     try {
       const data = await response.json();
-      if (data?.detail) {
+      if (response.status === 422 && data?.detail) {
+        if (typeof data.detail === "string") {
+          message = data.detail;
+        } else if (Array.isArray(data.detail)) {
+          const parts = data.detail.map(
+            (d: { loc?: unknown[]; msg?: string }) =>
+              (Array.isArray(d.loc) ? d.loc.join(".") : "") + ": " + (d.msg ?? "")
+          );
+          message = parts.join("; ") || message;
+        }
+      } else if (data?.detail) {
         message = typeof data.detail === "string" ? data.detail : message;
       }
       if (data?.errors && typeof data.errors === "object") {
