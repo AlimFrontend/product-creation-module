@@ -19,13 +19,13 @@ export function formatPrice(value: number | null | undefined): string {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
-    maximumFractionDigits: 2
+    maximumFractionDigits: 2,
   }).format(value);
 }
 
 export function debounce<T extends (...args: any[]) => void>(
   fn: T,
-  delay: number
+  delay: number,
 ) {
   let timer: ReturnType<typeof setTimeout> | undefined;
   return (...args: Parameters<T>) => {
@@ -38,4 +38,3 @@ export function safeParseNumber(value: string): number | undefined {
   const n = Number(value.replace(/\s/g, "").replace(",", "."));
   return Number.isFinite(n) ? n : undefined;
 }
-

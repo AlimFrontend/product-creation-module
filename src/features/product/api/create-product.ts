@@ -19,7 +19,7 @@ async function createProductApi(
 ): Promise<CreateProductResponse> {
   const body = productSchema.parse(payload);
 
-  const response = await fetch("/api/nomenclature", {
+  const response = await fetch("/api/nomenclature?token=af1874616430e04cfd4bce30035789907e899fc7c3a1a4bb27254828ff304a77", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"

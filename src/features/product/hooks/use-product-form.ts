@@ -7,7 +7,7 @@ import {
   DRAFT_STORAGE_KEY,
   REQUIRED_FIELDS,
   productSchema,
-  type ProductFormValues
+  type ProductFormValues,
 } from "@/features/product/model/schema";
 import { debounce, safeParseNumber, slugify } from "@/shared/lib/utils";
 
@@ -34,8 +34,8 @@ export function useProductForm() {
       chatting_percent: 0,
       address: "",
       latitude: 0,
-      longitude: 0
-    }
+      longitude: 0,
+    },
   });
 
   const [draftStatus, setDraftStatus] = useState<DraftStatus>("idle");
@@ -77,7 +77,7 @@ export function useProductForm() {
         setDraftStatus("saved");
         setTimeout(() => setDraftStatus("idle"), 1500);
       }, 700),
-    []
+    [],
   );
 
   useEffect(() => {
@@ -111,37 +111,34 @@ export function useProductForm() {
           methods.setValue(
             "description_short",
             values.description_short ||
-              `High-quality ${values.name} tailored for marketplace buyers.`
+              `High-quality ${values.name} tailored for marketplace buyers.`,
           );
           methods.setValue(
             "description_long",
             values.description_long ||
-              `This ${values.name} is designed to meet modern customer expectations with reliable quality, clear value, and a smooth post-purchase experience. Ideal for buyers looking for a trusted option in this category.`
+              `This ${values.name} is designed to meet modern customer expectations with reliable quality, clear value, and a smooth post-purchase experience. Ideal for buyers looking for a trusted option in this category.`,
           );
         }
 
         if (!values.seo_title || !values.seo_description) {
           methods.setValue(
             "seo_title",
-            values.seo_title || `${values.name} • Best price & fast delivery`
+            values.seo_title || `${values.name} • Best price & fast delivery`,
           );
           methods.setValue(
             "seo_description",
             values.seo_description ||
-              `Buy ${values.name} with secure checkout, transparent pricing, and fast delivery. Optimised for marketplace visibility and repeat purchases.`
+              `Buy ${values.name} with secure checkout, transparent pricing, and fast delivery. Optimised for marketplace visibility and repeat purchases.`,
           );
         }
 
         if (!values.seo_keywords?.length) {
-          const base = values.name
-            .toLowerCase()
-            .split(/\s+/)
-            .filter(Boolean);
+          const base = values.name.toLowerCase().split(/\s+/).filter(Boolean);
           const extended = [
             values.name.toLowerCase(),
             `${values.name.toLowerCase()} price`,
             `${values.name.toLowerCase()} buy online`,
-            ...base
+            ...base,
           ];
           methods.setValue("seo_keywords", Array.from(new Set(extended)));
         }
@@ -153,17 +150,17 @@ export function useProductForm() {
         if (!values.category) {
           methods.setValue(
             "category",
-            values.name.toLowerCase().includes("pro") ? 2 : 1
+            values.name.toLowerCase().includes("pro") ? 2 : 1,
           );
         }
 
         if (!values.global_category_id) {
           methods.setValue(
             "global_category_id",
-            values.name.toLowerCase().includes("subscription") ? 3 : 1
+            values.name.toLowerCase().includes("subscription") ? 3 : 1,
           );
         }
-      }, 600) as any
+      }, 600) as any,
     );
 
     return () => subscription.unsubscribe();
@@ -173,7 +170,7 @@ export function useProductForm() {
     if (!address) return;
     const hash = Array.from(address).reduce(
       (acc, char) => acc + char.charCodeAt(0),
-      0
+      0,
     );
     const latitude = 40 + (hash % 100) / 100;
     const longitude = -74 + (hash % 100) / 100;
@@ -187,7 +184,7 @@ export function useProductForm() {
       methods.setValue(name as any, n, { shouldValidate: true });
     } else {
       methods.setValue(name as any, undefined as any, {
-        shouldValidate: true
+        shouldValidate: true,
       });
     }
   };
@@ -211,7 +208,6 @@ export function useProductForm() {
     geocodeAddress,
     parseNumericField,
     resetForm,
-    cloneValues
+    cloneValues,
   };
 }
-
