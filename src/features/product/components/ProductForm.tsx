@@ -56,7 +56,7 @@ export function ProductForm() {
   }, [draftStatus]);
 
   return (
-    <div className="mx-auto flex max-w-6xl flex-1 flex-col gap-6 py-8 pl-4 pr-4 sm:pl-6 sm:pr-6 lg:px-8">
+    <div className="product-form-page mx-auto flex max-w-6xl flex-1 flex-col gap-6 py-8 sm:pl-6 sm:pr-6 lg:px-8">
       <header className="flex flex-wrap items-center justify-between gap-4 border-b pb-4">
         <div className="space-y-1">
           <h1 className="text-2xl font-semibold tracking-tight">
