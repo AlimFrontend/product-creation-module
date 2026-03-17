@@ -194,7 +194,7 @@ export function ProductForm() {
                     <Textarea
                       id="description_long"
                       placeholder="Опишите, что получает покупатель, что входит в заказ и как выполняется доставка."
-                      rows={5}
+                      rows={7}
                       {...field}
                     />
                   )}
