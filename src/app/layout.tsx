@@ -18,7 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ru" suppressHydrationWarning>
-      <body className="min-h-screen bg-background font-sans antialiased">
+      <body className="min-h-screen bg-background font-sans antialiased overflow-x-hidden">
         <ThemeProvider>
           <ReactQueryProvider>{children}</ReactQueryProvider>
         </ThemeProvider>
