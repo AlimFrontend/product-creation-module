@@ -1,12 +1,12 @@
 import { formatPrice } from "@/shared/lib/utils";
-import { Badge } from "@/shared/ui/badge";
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle
-} from "@/shared/ui/card";
+} from "@/components/ui/card";
 import type { ProductFormValues } from "../model/schema";
 
 interface ProductPreviewCardProps {

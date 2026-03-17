@@ -1,24 +1,31 @@
 "use client";
 
 import { useMemo } from "react";
+import { Loader2 } from "lucide-react";
 import { useProductForm } from "@/features/product/hooks/use-product-form";
 import { useCreateProduct } from "@/features/product/api/create-product";
 import type { ProductFormValues } from "@/features/product/model/schema";
 import { formatPrice } from "@/shared/lib/utils";
-import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
-import { Button } from "@/shared/ui/button";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle
-} from "@/shared/ui/card";
-import { Input } from "@/shared/ui/input";
-import { Label } from "@/shared/ui/label";
-import { Progress } from "@/shared/ui/progress";
-import { RHFForm, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
-import { Textarea } from "@/shared/ui/textarea";
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Progress } from "@/components/ui/progress";
+import {
+  RHFForm,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from "@/components/ui/form";
+import { Textarea } from "@/components/ui/textarea";
 import { ProductPreviewCard } from "./ProductPreviewCard";
 
 export function ProductForm() {
@@ -41,35 +48,42 @@ export function ProductForm() {
   }, [draftStatus]);
 
   return (
-    <div className="container py-8">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-        <div>
+    <div className="mx-auto flex max-w-6xl flex-1 flex-col gap-6 px-4 py-8 lg:px-8">
+      <header className="flex flex-wrap items-center justify-between gap-4 border-b pb-4">
+        <div className="space-y-1">
           <h1 className="text-2xl font-semibold tracking-tight">
-            New marketplace product
+            New product
           </h1>
           <p className="text-sm text-muted-foreground">
-            Structure your product listing for discovery, conversion, and operations.
+            Design a marketplace-ready listing with clear pricing, SEO, and location context.
           </p>
         </div>
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
+        <div className="flex flex-col items-end gap-2">
+          <div className="flex items-center gap-3">
             <Progress value={completion.percent} className="w-40" />
             <span className="text-xs text-muted-foreground tabular-nums">
               {completion.percent}% complete
             </span>
           </div>
-          <div className="text-xs text-muted-foreground">
+          <span className="text-xs text-muted-foreground">
             {draftLabel}
-          </div>
+          </span>
         </div>
-      </div>
+      </header>
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(260px,1fr)]">
-        <RHFForm methods={methods} onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <main className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(260px,1fr)] lg:items-start">
+        <RHFForm
+          methods={methods}
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-6"
+        >
           {/* Basic info */}
           <Card>
-            <CardHeader>
+            <CardHeader className="space-y-1">
               <CardTitle>Basic information</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Name, codes, and descriptions buyers will see across the marketplace.
+              </p>
             </CardHeader>
             <CardContent className="grid gap-4 md:grid-cols-2">
               <FormItem className="md:col-span-2">
@@ -151,8 +165,11 @@ export function ProductForm() {
 
           {/* Pricing */}
           <Card>
-            <CardHeader>
+            <CardHeader className="space-y-1">
               <CardTitle>Pricing</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Set marketplace price, cashback, and categorisation for search and analytics.
+              </p>
             </CardHeader>
             <CardContent className="grid gap-4 md:grid-cols-3">
               <FormItem>
@@ -245,8 +262,11 @@ export function ProductForm() {
 
           {/* SEO */}
           <Card>
-            <CardHeader>
+            <CardHeader className="space-y-1">
               <CardTitle>SEO & discovery</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Optimise how your product appears in search results and recommendations.
+              </p>
             </CardHeader>
             <CardContent className="grid gap-4">
               <FormItem>
@@ -310,8 +330,11 @@ export function ProductForm() {
 
           {/* Location */}
           <Card>
-            <CardHeader>
+            <CardHeader className="space-y-1">
               <CardTitle>Location</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Where this product is fulfilled from. We mock coordinates for preview.
+              </p>
             </CardHeader>
             <CardContent className="grid gap-4 md:grid-cols-3">
               <FormItem className="md:col-span-3">
@@ -369,7 +392,7 @@ export function ProductForm() {
                 <FormMessage data-field-name="longitude" />
               </FormItem>
             </CardContent>
-            <CardFooter className="justify-between gap-3">
+            <CardFooter className="justify-between gap-3 border-t bg-muted/40 px-6 py-4">
               <Button
                 type="button"
                 variant="outline"
@@ -390,6 +413,9 @@ export function ProductForm() {
                   Reset form
                 </Button>
                 <Button type="submit" disabled={isSubmitting}>
+                  {isSubmitting && (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
+                  )}
                   {isSubmitting ? "Publishing…" : "Publish product"}
                 </Button>
               </div>
@@ -418,8 +444,10 @@ export function ProductForm() {
           ) : null}
         </RHFForm>
 
-        <ProductPreviewCard values={methods.getValues()} />
-      </div>
+        <aside className="hidden lg:block">
+          <ProductPreviewCard values={methods.getValues()} />
+        </aside>
+      </main>
     </div>
   );
 }
