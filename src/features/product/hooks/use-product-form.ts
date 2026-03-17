@@ -9,7 +9,13 @@ import {
   productSchema,
   type ProductFormValues,
 } from "@/features/product/model/schema";
-import { debounce, safeParseNumber, slugify } from "@/shared/lib/utils";
+import {
+  formatTextForReadability,
+  generateAllFromName,
+  generateSeoFromName,
+  suggestCategoryByName,
+} from "@/features/product/lib/ai-mock";
+import { debounce, safeParseNumber } from "@/shared/lib/utils";
 
 type DraftStatus = "idle" | "saving" | "saved";
 
@@ -102,70 +108,79 @@ export function useProductForm() {
     return { percent, filled, total: REQUIRED_FIELDS.length };
   }, [methods]);
 
-  // smart autofill from name
+  // автозаполнение из названия (русские шаблоны, мок нейронки)
+  const debouncedAutofill = useMemo(
+    () =>
+      debounce((values: Partial<ProductFormValues>) => {
+        const name = values.name?.trim();
+        if (!name) return;
+        const generated = generateAllFromName(name);
+        if (!values.description_short?.trim())
+          methods.setValue("description_short", generated.description_short);
+        if (!values.description_long?.trim())
+          methods.setValue("description_long", generated.description_long);
+        if (!values.code?.trim()) methods.setValue("code", generated.code);
+        if (!values.seo_title?.trim())
+          methods.setValue("seo_title", generated.seo_title);
+        if (!values.seo_description?.trim())
+          methods.setValue("seo_description", generated.seo_description);
+        if (!values.seo_keywords?.length)
+          methods.setValue("seo_keywords", generated.seo_keywords);
+        if (values.category == null) methods.setValue("category", generated.category);
+        if (values.global_category_id == null)
+          methods.setValue("global_category_id", generated.global_category_id);
+      }, 600),
+    [methods],
+  );
   useEffect(() => {
-    const subscription = methods.watch(
-      debounce((values: ProductFormValues) => {
-        if (!values.name) return;
-
-        if (!values.description_short || !values.description_long) {
-          methods.setValue(
-            "description_short",
-            values.description_short ||
-              `High-quality ${values.name} tailored for marketplace buyers.`,
-          );
-          methods.setValue(
-            "description_long",
-            values.description_long ||
-              `This ${values.name} is designed to meet modern customer expectations with reliable quality, clear value, and a smooth post-purchase experience. Ideal for buyers looking for a trusted option in this category.`,
-          );
-        }
-
-        if (!values.seo_title || !values.seo_description) {
-          methods.setValue(
-            "seo_title",
-            values.seo_title || `${values.name} • Best price & fast delivery`,
-          );
-          methods.setValue(
-            "seo_description",
-            values.seo_description ||
-              `Buy ${values.name} with secure checkout, transparent pricing, and fast delivery. Optimised for marketplace visibility and repeat purchases.`,
-          );
-        }
-
-        if (!values.seo_keywords?.length) {
-          const base = values.name.toLowerCase().split(/\s+/).filter(Boolean);
-          const extended = [
-            values.name.toLowerCase(),
-            `${values.name.toLowerCase()} price`,
-            `${values.name.toLowerCase()} buy online`,
-            ...base,
-          ];
-          methods.setValue("seo_keywords", Array.from(new Set(extended)));
-        }
-
-        if (!values.code) {
-          methods.setValue("code", slugify(values.name).toUpperCase());
-        }
-
-        if (!values.category) {
-          methods.setValue(
-            "category",
-            values.name.toLowerCase().includes("pro") ? 2 : 1,
-          );
-        }
-
-        if (!values.global_category_id) {
-          methods.setValue(
-            "global_category_id",
-            values.name.toLowerCase().includes("subscription") ? 3 : 1,
-          );
-        }
-      }, 600) as any,
-    );
-
+    const subscription = methods.watch((values) => {
+      debouncedAutofill(values);
+    });
     return () => subscription.unsubscribe();
-  }, [methods]);
+  }, [methods, debouncedAutofill]);
+
+  const generateAllFromNameAction = () => {
+    const name = methods.getValues("name")?.trim();
+    if (!name) return;
+    const generated = generateAllFromName(name);
+    methods.setValue("description_short", generated.description_short);
+    methods.setValue("description_long", generated.description_long);
+    methods.setValue("code", generated.code);
+    methods.setValue("category", generated.category);
+    methods.setValue("global_category_id", generated.global_category_id);
+    methods.setValue("seo_title", generated.seo_title);
+    methods.setValue("seo_description", generated.seo_description);
+    methods.setValue("seo_keywords", generated.seo_keywords);
+  };
+
+  const formatShortDescription = () => {
+    const v = methods.getValues("description_short");
+    if (v) methods.setValue("description_short", formatTextForReadability(v));
+  };
+
+  const formatLongDescription = () => {
+    const v = methods.getValues("description_long");
+    if (v) methods.setValue("description_long", formatTextForReadability(v));
+  };
+
+  const generateSeoAction = () => {
+    const name = methods.getValues("name")?.trim();
+    const short = methods.getValues("description_short");
+    const { seo_title, seo_description, seo_keywords } = generateSeoFromName(
+      name || "Товар",
+      short,
+    );
+    methods.setValue("seo_title", seo_title);
+    methods.setValue("seo_description", seo_description);
+    methods.setValue("seo_keywords", seo_keywords);
+  };
+
+  const suggestCategoryAction = () => {
+    const name = methods.getValues("name")?.trim();
+    const { category, global_category_id } = suggestCategoryByName(name || "");
+    methods.setValue("category", category);
+    methods.setValue("global_category_id", global_category_id);
+  };
 
   const geocodeAddress = (address: string) => {
     if (!address) return;
@@ -210,5 +225,10 @@ export function useProductForm() {
     parseNumericField,
     resetForm,
     cloneValues,
+    generateAllFromNameAction,
+    formatShortDescription,
+    formatLongDescription,
+    generateSeoAction,
+    suggestCategoryAction,
   };
 }

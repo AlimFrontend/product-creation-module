@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, Sparkles } from "lucide-react";
 import { useProductForm } from "@/features/product/hooks/use-product-form";
 import { useCreateProduct } from "@/features/product/api/create-product";
 import type { ProductFormValues } from "@/features/product/model/schema";
@@ -27,8 +27,19 @@ import { Textarea } from "@/components/ui/textarea";
 import { ProductPreviewCard } from "./ProductPreviewCard";
 
 export function ProductForm() {
-  const { methods, draftStatus, geocodeAddress, parseNumericField, resetForm, cloneValues } =
-    useProductForm();
+  const {
+    methods,
+    draftStatus,
+    geocodeAddress,
+    parseNumericField,
+    resetForm,
+    cloneValues,
+    generateAllFromNameAction,
+    formatShortDescription,
+    formatLongDescription,
+    generateSeoAction,
+    suggestCategoryAction,
+  } = useProductForm();
   const createProduct = useCreateProduct();
 
   const { handleSubmit, control, formState } = methods;
@@ -70,10 +81,25 @@ export function ProductForm() {
           {/* Basic info */}
           <Card>
             <CardHeader className="space-y-1">
-              <CardTitle>Основная информация</CardTitle>
-              <p className="text-sm text-muted-foreground">
-                Название, код и описания, которые видят покупатели на маркетплейсе.
-              </p>
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <CardTitle>Основная информация</CardTitle>
+                  <p className="text-sm text-muted-foreground">
+                    Название, код и описания, которые видят покупатели на маркетплейсе.
+                  </p>
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={generateAllFromNameAction}
+                  disabled={isSubmitting}
+                  className="shrink-0"
+                >
+                  <Sparkles className="mr-1.5 h-4 w-4" />
+                  Сгенерировать из названия
+                </Button>
+              </div>
             </CardHeader>
             <CardContent className="grid gap-4 md:grid-cols-2">
               <FormItem className="md:col-span-2">
@@ -118,7 +144,20 @@ export function ProductForm() {
               </FormItem>
 
               <FormItem className="md:col-span-2">
-                <FormLabel htmlFor="description_short">Краткое описание</FormLabel>
+                <div className="flex items-center justify-between gap-2">
+                  <FormLabel htmlFor="description_short">Краткое описание</FormLabel>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={formatShortDescription}
+                    disabled={isSubmitting}
+                    className="text-xs"
+                  >
+                    <Sparkles className="mr-1 h-3 w-3" />
+                    Причесать текст
+                  </Button>
+                </div>
                 <FormField
                   control={control}
                   name="description_short"
@@ -135,7 +174,20 @@ export function ProductForm() {
               </FormItem>
 
               <FormItem className="md:col-span-2">
-                <FormLabel htmlFor="description_long">Подробное описание</FormLabel>
+                <div className="flex items-center justify-between gap-2">
+                  <FormLabel htmlFor="description_long">Подробное описание</FormLabel>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={formatLongDescription}
+                    disabled={isSubmitting}
+                    className="text-xs"
+                  >
+                    <Sparkles className="mr-1 h-3 w-3" />
+                    Причесать текст
+                  </Button>
+                </div>
                 <FormField
                   control={control}
                   name="description_long"
@@ -156,10 +208,25 @@ export function ProductForm() {
           {/* Pricing */}
           <Card>
             <CardHeader className="space-y-1">
-              <CardTitle>Цены и категории</CardTitle>
-              <p className="text-sm text-muted-foreground">
-                Цена на маркетплейсе, кэшбэк и категории для поиска и аналитики.
-              </p>
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <CardTitle>Цены и категории</CardTitle>
+                  <p className="text-sm text-muted-foreground">
+                    Цена на маркетплейсе, кэшбэк и категории для поиска и аналитики.
+                  </p>
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={suggestCategoryAction}
+                  disabled={isSubmitting}
+                  className="shrink-0"
+                >
+                  <Sparkles className="mr-1.5 h-4 w-4" />
+                  Подобрать категорию по названию
+                </Button>
+              </div>
             </CardHeader>
             <CardContent className="grid gap-4 md:grid-cols-3">
               <FormItem>
@@ -253,10 +320,25 @@ export function ProductForm() {
           {/* SEO */}
           <Card>
             <CardHeader className="space-y-1">
-              <CardTitle>SEO и поиск</CardTitle>
-              <p className="text-sm text-muted-foreground">
-                Как товар будет отображаться в поиске и рекомендациях.
-              </p>
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <CardTitle>SEO и поиск</CardTitle>
+                  <p className="text-sm text-muted-foreground">
+                    Как товар будет отображаться в поиске и рекомендациях.
+                  </p>
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={generateSeoAction}
+                  disabled={isSubmitting}
+                  className="shrink-0"
+                >
+                  <Sparkles className="mr-1.5 h-4 w-4" />
+                  Сгенерировать SEO
+                </Button>
+              </div>
             </CardHeader>
             <CardContent className="grid gap-4">
               <FormItem>
