@@ -1,41 +1,41 @@
 import { z } from "zod";
 
 export const productSchema = z.object({
-  name: z.string().min(3, "Name is required"),
+  name: z.string().min(3, "Укажите название товара"),
   type: z.literal("product").default("product"),
   description_short: z
     .string()
-    .min(10, "Short description helps buyers understand the product"),
+    .min(10, "Краткое описание помогает покупателям понять товар"),
   description_long: z
     .string()
-    .min(20, "Long description should provide more detail"),
-  code: z.string().min(3, "Code is required"),
-  unit: z.number({ invalid_type_error: "Unit is required" }),
-  category: z.number({ invalid_type_error: "Category is required" }),
+    .min(20, "Подробное описание должно содержать больше деталей"),
+  code: z.string().min(3, "Укажите код товара"),
+  unit: z.number({ invalid_type_error: "Укажите единицу измерения" }),
+  category: z.number({ invalid_type_error: "Укажите категорию" }),
   cashback_type: z.literal("lcard_cashback").default("lcard_cashback"),
-  seo_title: z.string().min(10, "SEO title improves search discoverability"),
+  seo_title: z.string().min(10, "SEO-заголовок улучшает показ в поиске"),
   seo_description: z
     .string()
-    .min(20, "SEO description should summarise the product"),
+    .min(20, "SEO-описание должно кратко описывать товар"),
   seo_keywords: z
     .array(z.string())
-    .min(1, "At least one keyword helps discovery"),
+    .min(1, "Укажите хотя бы одно ключевое слово"),
   global_category_id: z.number({
-    invalid_type_error: "Global category is required"
+    invalid_type_error: "Укажите глобальную категорию"
   }),
   marketplace_price: z
-    .number({ invalid_type_error: "Marketplace price is required" })
-    .positive("Price must be positive"),
+    .number({ invalid_type_error: "Укажите цену на маркетплейсе" })
+    .positive("Цена должна быть положительной"),
   chatting_percent: z
-    .number({ invalid_type_error: "Chatting percent is required" })
+    .number({ invalid_type_error: "Укажите процент кэшбэка" })
     .min(0)
     .max(100),
-  address: z.string().min(5, "Address is required"),
+  address: z.string().min(5, "Укажите адрес"),
   latitude: z.number({
-    invalid_type_error: "Latitude is required (mocked geocode)"
+    invalid_type_error: "Укажите широту (подставляется по адресу)"
   }),
   longitude: z.number({
-    invalid_type_error: "Longitude is required (mocked geocode)"
+    invalid_type_error: "Укажите долготу (подставляется по адресу)"
   })
 });
 

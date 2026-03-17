@@ -4,8 +4,8 @@ import { ReactQueryProvider } from "@/shared/lib/react-query-provider";
 import { ThemeProvider } from "@/shared/lib/theme-provider";
 
 export const metadata: Metadata = {
-  title: "Marketplace Product Creator",
-  description: "Create and optimize marketplace products with a polished workflow."
+  title: "Создание товара для маркетплейса",
+  description: "Создавайте и настраивайте карточки товаров для маркетплейса."
 };
 
 export default function RootLayout({
@@ -14,7 +14,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="ru" suppressHydrationWarning>
       <body className="min-h-screen bg-background font-sans antialiased">
         <ThemeProvider>
           <ReactQueryProvider>{children}</ReactQueryProvider>

@@ -4,9 +4,6 @@ import {
   type ProductFormValues
 } from "@/features/product/model/schema";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
-const API_TOKEN = process.env.NEXT_PUBLIC_API_TOKEN;
-
 export type CreateProductResponse = {
   id: number;
   name: string;
@@ -20,19 +17,9 @@ export type ApiError =
 async function createProductApi(
   payload: ProductFormValues
 ): Promise<CreateProductResponse> {
-  if (!API_URL || !API_TOKEN) {
-    throw {
-      type: "unknown",
-      message:
-        "API configuration is missing. Please ensure NEXT_PUBLIC_API_URL and NEXT_PUBLIC_API_TOKEN are set."
-    } satisfies ApiError;
-  }
-
   const body = productSchema.parse(payload);
 
-  const url = `${API_URL}?token=${API_TOKEN}`;
-
-  const response = await fetch(url, {
+  const response = await fetch("/api/nomenclature", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -41,7 +28,7 @@ async function createProductApi(
   });
 
   if (!response.ok) {
-    let message = "Failed to create product";
+    let message = "Не удалось создать товар";
     let fieldErrors: Record<string, string[]> | undefined;
 
     try {
@@ -74,7 +61,7 @@ export function useCreateProduct() {
         if ((error as ApiError).type) throw error as ApiError;
         const networkError: ApiError = {
           type: "network",
-          message: error instanceof Error ? error.message : "Network error"
+          message: error instanceof Error ? error.message : "Ошибка сети"
         };
         throw networkError;
       }

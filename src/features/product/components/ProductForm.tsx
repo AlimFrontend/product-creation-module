@@ -16,8 +16,6 @@ import {
   CardTitle
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Progress } from "@/components/ui/progress";
 import {
   RHFForm,
   FormField,
@@ -29,7 +27,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ProductPreviewCard } from "./ProductPreviewCard";
 
 export function ProductForm() {
-  const { methods, draftStatus, completion, geocodeAddress, parseNumericField, resetForm, cloneValues } =
+  const { methods, draftStatus, geocodeAddress, parseNumericField, resetForm, cloneValues } =
     useProductForm();
   const createProduct = useCreateProduct();
 
@@ -42,9 +40,9 @@ export function ProductForm() {
   };
 
   const draftLabel = useMemo(() => {
-    if (draftStatus === "saving") return "Saving draft…";
-    if (draftStatus === "saved") return "Draft saved";
-    return "Draft ready";
+    if (draftStatus === "saving") return "Сохранение черновика…";
+    if (draftStatus === "saved") return "Черновик сохранён";
+    return "Черновик готов";
   }, [draftStatus]);
 
   return (
@@ -52,24 +50,15 @@ export function ProductForm() {
       <header className="flex flex-wrap items-center justify-between gap-4 border-b pb-4">
         <div className="space-y-1">
           <h1 className="text-2xl font-semibold tracking-tight">
-            New product
+            Новый товар
           </h1>
-          <div className="bg-red-500 p-10 text-white">TEST</div>
           <p className="text-sm text-muted-foreground">
-            Design a marketplace-ready listing with clear pricing, SEO, and location context.
+            Заполните карточку товара: цены, SEO и место доставки.
           </p>
         </div>
-        <div className="flex flex-col items-end gap-2">
-          <div className="flex items-center gap-3">
-            <Progress value={completion.percent} className="w-40" />
-            <span className="text-xs text-muted-foreground tabular-nums">
-              {completion.percent}% complete
-            </span>
-          </div>
-          <span className="text-xs text-muted-foreground">
-            {draftLabel}
-          </span>
-        </div>
+        <span className="text-xs text-muted-foreground">
+          {draftLabel}
+        </span>
       </header>
 
       <main className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(260px,1fr)] lg:items-start">
@@ -81,38 +70,38 @@ export function ProductForm() {
           {/* Basic info */}
           <Card>
             <CardHeader className="space-y-1">
-              <CardTitle>Basic information</CardTitle>
+              <CardTitle>Основная информация</CardTitle>
               <p className="text-sm text-muted-foreground">
-                Name, codes, and descriptions buyers will see across the marketplace.
+                Название, код и описания, которые видят покупатели на маркетплейсе.
               </p>
             </CardHeader>
             <CardContent className="grid gap-4 md:grid-cols-2">
               <FormItem className="md:col-span-2">
-                <FormLabel htmlFor="name">Product name</FormLabel>
+                <FormLabel htmlFor="name">Название товара</FormLabel>
                 <FormField
                   control={control}
                   name="name"
                   render={({ field }) => (
-                    <Input id="name" placeholder="E.g. Premium coffee subscription" {...field} />
+                    <Input id="name" placeholder="Например: Подписка на кофе премиум" {...field} />
                   )}
                 />
                 <FormMessage data-field-name="name" />
               </FormItem>
 
               <FormItem>
-                <FormLabel htmlFor="code">Internal code</FormLabel>
+                <FormLabel htmlFor="code">Внутренний код</FormLabel>
                 <FormField
                   control={control}
                   name="code"
                   render={({ field }) => (
-                    <Input id="code" placeholder="AUTO-GENERATED" {...field} />
+                    <Input id="code" placeholder="Подставится автоматически" {...field} />
                   )}
                 />
                 <FormMessage data-field-name="code" />
               </FormItem>
 
               <FormItem>
-                <FormLabel htmlFor="unit">Unit (numeric id)</FormLabel>
+                <FormLabel htmlFor="unit">Единица измерения (числовой id)</FormLabel>
                 <FormField
                   control={control}
                   name="unit"
@@ -129,14 +118,14 @@ export function ProductForm() {
               </FormItem>
 
               <FormItem className="md:col-span-2">
-                <FormLabel htmlFor="description_short">Short description</FormLabel>
+                <FormLabel htmlFor="description_short">Краткое описание</FormLabel>
                 <FormField
                   control={control}
                   name="description_short"
                   render={({ field }) => (
                     <Textarea
                       id="description_short"
-                      placeholder="Shown on listing cards and search results."
+                      placeholder="Показывается в карточках и результатах поиска."
                       rows={2}
                       {...field}
                     />
@@ -146,14 +135,14 @@ export function ProductForm() {
               </FormItem>
 
               <FormItem className="md:col-span-2">
-                <FormLabel htmlFor="description_long">Long description</FormLabel>
+                <FormLabel htmlFor="description_long">Подробное описание</FormLabel>
                 <FormField
                   control={control}
                   name="description_long"
                   render={({ field }) => (
                     <Textarea
                       id="description_long"
-                      placeholder="Clarify what buyers get, what is included, and how fulfillment works."
+                      placeholder="Опишите, что получает покупатель, что входит в заказ и как выполняется доставка."
                       rows={4}
                       {...field}
                     />
@@ -167,14 +156,14 @@ export function ProductForm() {
           {/* Pricing */}
           <Card>
             <CardHeader className="space-y-1">
-              <CardTitle>Pricing</CardTitle>
+              <CardTitle>Цены и категории</CardTitle>
               <p className="text-sm text-muted-foreground">
-                Set marketplace price, cashback, and categorisation for search and analytics.
+                Цена на маркетплейсе, кэшбэк и категории для поиска и аналитики.
               </p>
             </CardHeader>
             <CardContent className="grid gap-4 md:grid-cols-3">
               <FormItem>
-                <FormLabel htmlFor="marketplace_price">Marketplace price</FormLabel>
+                <FormLabel htmlFor="marketplace_price">Цена на маркетплейсе</FormLabel>
                 <FormField
                   control={control}
                   name="marketplace_price"
@@ -194,7 +183,7 @@ export function ProductForm() {
               </FormItem>
 
               <FormItem>
-                <FormLabel htmlFor="chatting_percent">Cashback percent</FormLabel>
+                <FormLabel htmlFor="chatting_percent">Процент кэшбэка</FormLabel>
                 <FormField
                   control={control}
                   name="chatting_percent"
@@ -211,7 +200,7 @@ export function ProductForm() {
               </FormItem>
 
               <FormItem>
-                <FormLabel htmlFor="cashback_type">Cashback type</FormLabel>
+                <FormLabel htmlFor="cashback_type">Тип кэшбэка</FormLabel>
                 <FormField
                   control={control}
                   name="cashback_type"
@@ -222,7 +211,7 @@ export function ProductForm() {
               </FormItem>
 
               <FormItem>
-                <FormLabel htmlFor="category">Category (internal id)</FormLabel>
+                <FormLabel htmlFor="category">Категория (внутренний id)</FormLabel>
                 <FormField
                   control={control}
                   name="category"
@@ -240,7 +229,7 @@ export function ProductForm() {
 
               <FormItem>
                 <FormLabel htmlFor="global_category_id">
-                  Global category (search taxonomy id)
+                  Глобальная категория (id для поиска)
                 </FormLabel>
                 <FormField
                   control={control}
@@ -264,21 +253,21 @@ export function ProductForm() {
           {/* SEO */}
           <Card>
             <CardHeader className="space-y-1">
-              <CardTitle>SEO & discovery</CardTitle>
+              <CardTitle>SEO и поиск</CardTitle>
               <p className="text-sm text-muted-foreground">
-                Optimise how your product appears in search results and recommendations.
+                Как товар будет отображаться в поиске и рекомендациях.
               </p>
             </CardHeader>
             <CardContent className="grid gap-4">
               <FormItem>
-                <FormLabel htmlFor="seo_title">SEO title</FormLabel>
+                <FormLabel htmlFor="seo_title">SEO-заголовок</FormLabel>
                 <FormField
                   control={control}
                   name="seo_title"
                   render={({ field }) => (
                     <Input
                       id="seo_title"
-                      placeholder="How the product appears in search results"
+                      placeholder="Как товар показывается в результатах поиска"
                       {...field}
                     />
                   )}
@@ -287,7 +276,7 @@ export function ProductForm() {
               </FormItem>
 
               <FormItem>
-                <FormLabel htmlFor="seo_description">SEO description</FormLabel>
+                <FormLabel htmlFor="seo_description">SEO-описание</FormLabel>
                 <FormField
                   control={control}
                   name="seo_description"
@@ -295,7 +284,7 @@ export function ProductForm() {
                     <Textarea
                       id="seo_description"
                       rows={3}
-                      placeholder="A concise, compelling summary that would make you click."
+                      placeholder="Краткое привлекательное описание для поиска."
                       {...field}
                     />
                   )}
@@ -304,14 +293,14 @@ export function ProductForm() {
               </FormItem>
 
               <FormItem>
-                <FormLabel htmlFor="seo_keywords">Keywords</FormLabel>
+                <FormLabel htmlFor="seo_keywords">Ключевые слова</FormLabel>
                 <FormField
                   control={control}
                   name="seo_keywords"
                   render={({ field }) => (
                     <Input
                       id="seo_keywords"
-                      placeholder="Separated by comma. We auto-generate from the name."
+                      placeholder="Через запятую. Можно сгенерировать из названия."
                       value={field.value?.join(", ") ?? ""}
                       onChange={(e) =>
                         field.onChange(
@@ -332,14 +321,14 @@ export function ProductForm() {
           {/* Location */}
           <Card>
             <CardHeader className="space-y-1">
-              <CardTitle>Location</CardTitle>
+              <CardTitle>Местоположение</CardTitle>
               <p className="text-sm text-muted-foreground">
-                Where this product is fulfilled from. We mock coordinates for preview.
+                Откуда доставляется товар. Координаты подставляются по адресу для превью.
               </p>
             </CardHeader>
             <CardContent className="grid gap-4 md:grid-cols-3">
               <FormItem className="md:col-span-3">
-                <FormLabel htmlFor="address">Address</FormLabel>
+                <FormLabel htmlFor="address">Адрес</FormLabel>
                 <FormField
                   control={control}
                   name="address"
@@ -347,7 +336,7 @@ export function ProductForm() {
                     <Textarea
                       id="address"
                       rows={2}
-                      placeholder="Visible to buyers and used for mocked geocoding."
+                      placeholder="Виден покупателям, по нему подставляются координаты."
                       {...field}
                       onBlur={(e) => {
                         field.onBlur();
@@ -360,7 +349,7 @@ export function ProductForm() {
               </FormItem>
 
               <FormItem>
-                <FormLabel htmlFor="latitude">Latitude</FormLabel>
+                <FormLabel htmlFor="latitude">Широта</FormLabel>
                 <FormField
                   control={control}
                   name="latitude"
@@ -377,7 +366,7 @@ export function ProductForm() {
               </FormItem>
 
               <FormItem>
-                <FormLabel htmlFor="longitude">Longitude</FormLabel>
+                <FormLabel htmlFor="longitude">Долгота</FormLabel>
                 <FormField
                   control={control}
                   name="longitude"
@@ -401,7 +390,7 @@ export function ProductForm() {
                 onClick={cloneValues}
                 disabled={isSubmitting}
               >
-                Duplicate as new product
+                Создать копию товара
               </Button>
               <div className="flex gap-2">
                 <Button
@@ -411,13 +400,13 @@ export function ProductForm() {
                   onClick={resetForm}
                   disabled={isSubmitting}
                 >
-                  Reset form
+                  Сбросить форму
                 </Button>
                 <Button type="submit" disabled={isSubmitting}>
                   {isSubmitting && (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
                   )}
-                  {isSubmitting ? "Publishing…" : "Publish product"}
+                  {isSubmitting ? "Публикуем…" : "Опубликовать товар"}
                 </Button>
               </div>
             </CardFooter>
@@ -425,21 +414,21 @@ export function ProductForm() {
 
           {createProduct.isError ? (
             <Alert className="border-destructive/40 bg-destructive/5">
-              <AlertTitle>Could not publish</AlertTitle>
+              <AlertTitle>Не удалось опубликовать</AlertTitle>
               <AlertDescription>
                 {"message" in createProduct.error
                   ? createProduct.error.message
-                  : "Something went wrong while talking to the API."}
+                  : "Произошла ошибка при обращении к API."}
               </AlertDescription>
             </Alert>
           ) : null}
 
           {createProduct.isSuccess ? (
             <Alert className="border-emerald-400/50 bg-emerald-50">
-              <AlertTitle>Product created</AlertTitle>
+              <AlertTitle>Товар создан</AlertTitle>
               <AlertDescription>
-                Product <span className="font-semibold">{createProduct.data.name}</span>{" "}
-                was successfully created with id {createProduct.data.id}.
+                Товар <span className="font-semibold">{createProduct.data.name}</span>{" "}
+                успешно создан с id {createProduct.data.id}.
               </AlertDescription>
             </Alert>
           ) : null}
@@ -454,7 +443,7 @@ export function ProductForm() {
 }
 
 function fieldValuePreview(value: number | null | undefined) {
-  if (!value) return "Preview: —";
-  return `Preview: ${formatPrice(value)}`;
+  if (!value) return "Превью: —";
+  return `Превью: ${formatPrice(value)}`;
 }
 
