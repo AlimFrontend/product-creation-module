@@ -1,21 +1,13 @@
-"use client";
+ "use client";
 
-import { ThemeProvider as NextThemeProvider } from "next-themes";
-import { ReactNode } from "react";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
+import type { ReactNode } from "react";
 
-export function ThemeProvider({
-  children,
-  ...props
-}: {
-  children: ReactNode;
-  attribute: string;
-  defaultTheme?: string;
-  enableSystem?: boolean;
-}) {
+export function ThemeProvider({ children }: { children: ReactNode }) {
   return (
-    <NextThemeProvider {...props}>
+    <NextThemesProvider attribute="class" defaultTheme="system" enableSystem>
       {children}
-    </NextThemeProvider>
+    </NextThemesProvider>
   );
 }
 
