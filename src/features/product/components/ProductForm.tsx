@@ -194,7 +194,7 @@ export function ProductForm() {
                     <Textarea
                       id="description_long"
                       placeholder="Опишите, что получает покупатель, что входит в заказ и как выполняется доставка."
-                      rows={4}
+                      rows={5}
                       {...field}
                     />
                   )}
@@ -463,7 +463,7 @@ export function ProductForm() {
                 <FormMessage data-field-name="longitude" />
               </FormItem>
             </CardContent>
-            <CardFooter className="justify-between gap-3 border-t bg-muted/40 px-6 py-4">
+            <CardFooter className="justify-end gap-3 border-t bg-muted/40 px-6 py-4">
               <div className="flex gap-2">
                 <Button
                   type="button"

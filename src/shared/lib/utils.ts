@@ -16,10 +16,10 @@ export function slugify(value: string): string {
 
 export function formatPrice(value: number | null | undefined): string {
   if (value == null || Number.isNaN(value)) return "";
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat("ru-RU", {
     style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 2,
+    currency: "RUB",
+    maximumFractionDigits: 0,
   }).format(value);
 }
 
