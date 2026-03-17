@@ -54,6 +54,7 @@ export function ProductForm() {
           <h1 className="text-2xl font-semibold tracking-tight">
             New product
           </h1>
+          <div className="bg-red-500 p-10 text-white">TEST</div>
           <p className="text-sm text-muted-foreground">
             Design a marketplace-ready listing with clear pricing, SEO, and location context.
           </p>
